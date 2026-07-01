@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jorge Hugo Pérez Gaona · Panel Interactivo</title>
+<meta name="description" content="Docente del Diplomado en Experiencia del Consumidor · Poli × Plaza Imperial. CEO ICONE ialabs, Mentor certificado, Speaker EXMA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#173049; --navy-2:#0f2136; --navy-3:#0a1826;
+  --cyan:#00A0CE; --cyan-soft:#4ec6e6; --cyan-glow:rgba(0,160,206,.35);
+  --ink:#eaf2f7; --muted:#9db2c4; --line:rgba(255,255,255,.10);
+  --card:rgba(255,255,255,.045); --card-h:rgba(255,255,255,.08);
+  --r:18px; --maxw:1180px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(0,160,206,.18), transparent 60%),
+    radial-gradient(900px 500px at 0% 110%, rgba(0,160,206,.10), transparent 55%),
+    linear-gradient(160deg,var(--navy-2),var(--navy-3));
+  color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+h1,h2,h3,.dsp{font-family:'Sora',sans-serif;letter-spacing:-.02em}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+.cyan{color:var(--cyan-soft)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan-soft)}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--cyan);border-radius:2px}
+
+/* ---------- Progress bar ---------- */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--cyan),var(--cyan-soft));z-index:100;box-shadow:0 0 12px var(--cyan-glow)}
+
+/* ---------- Nav ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:90;backdrop-filter:blur(14px);
+  background:rgba(10,24,38,.72);border-bottom:1px solid var(--line);transition:.3s}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:12px;font-family:'Sora';font-weight:700;font-size:.98rem}
+.brand .dot{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--cyan),#0077a3);color:#fff;font-weight:800;font-size:.9rem;box-shadow:0 6px 18px var(--cyan-glow)}
+.brand small{display:block;font-family:'Inter';font-weight:500;color:var(--muted);font-size:.68rem;letter-spacing:.02em}
+.nav-links{display:flex;gap:6px}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:500;padding:8px 12px;border-radius:9px;transition:.2s}
+.nav-links a:hover,.nav-links a.active{color:#fff;background:var(--card-h)}
+.nav-cta{background:var(--cyan);color:#04121d;padding:9px 16px;border-radius:10px;font-weight:600;font-size:.82rem;text-decoration:none;transition:.2s;white-space:nowrap}
+.nav-cta:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.burger{display:none;background:none;border:0;color:#fff;font-size:1.5rem;cursor:pointer}
+@media(max-width:880px){.nav-links{display:none}.burger{display:block}}
+
+/* ---------- Sections ---------- */
+section{padding:clamp(70px,10vh,120px) 0;position:relative}
+.reveal{opacity:0;transform:translateY(26px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.sec-title{font-size:clamp(1.6rem,3.6vw,2.5rem);font-weight:800;margin:14px 0 10px;line-height:1.12}
+.sec-sub{color:var(--muted);max-width:640px;font-size:1.02rem}
+
+/* ---------- Hero ---------- */
+#hero{min-height:100vh;display:flex;align-items:center;padding-top:64px}
+.hero-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:48px;align-items:center;width:100%}
+.hero-name{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:800;line-height:1.02;margin:16px 0}
+.hero-name .grad{background:linear-gradient(120deg,var(--cyan-soft),var(--cyan) 60%,#7fe0ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-role{font-size:clamp(1.05rem,2.3vw,1.35rem);color:var(--ink);font-weight:500;max-width:560px}
+.hero-role b{color:var(--cyan-soft);font-weight:600}
+.hero-tags{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 30px}
+.tag{border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;font-size:.8rem;color:var(--muted);transition:.2s}
+.tag:hover{border-color:var(--cyan);color:#fff;transform:translateY(-2px)}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+.btn{padding:14px 24px;border-radius:12px;font-weight:600;font-size:.92rem;text-decoration:none;transition:.22s;display:inline-flex;align-items:center;gap:9px;cursor:pointer;border:0}
+.btn-p{background:var(--cyan);color:#04121d;box-shadow:0 10px 28px var(--cyan-glow)}
+.btn-p:hover{transform:translateY(-2px);filter:brightness(1.07)}
+.btn-g{background:transparent;color:#fff;border:1px solid var(--line)}
+.btn-g:hover{border-color:var(--cyan);background:var(--card-h)}
+/* portrait card */
+.portrait{position:relative;border-radius:26px;padding:2px;background:linear-gradient(140deg,var(--cyan),transparent 45%,rgba(255,255,255,.12));box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.portrait-in{background:linear-gradient(160deg,var(--navy),var(--navy-3));border-radius:24px;padding:32px 28px;position:relative;overflow:hidden}
+.portrait-in::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 10%,var(--cyan-glow),transparent 55%);opacity:.5}
+.avatar{width:96px;height:96px;border-radius:22px;display:grid;place-items:center;font-family:'Sora';font-weight:800;font-size:2rem;color:#fff;background:linear-gradient(135deg,var(--cyan),#005f83);box-shadow:0 12px 30px var(--cyan-glow);position:relative;z-index:1}
+.portrait h3{font-size:1.25rem;margin:18px 0 4px;position:relative;z-index:1}
+.portrait .p-role{color:var(--cyan-soft);font-size:.85rem;font-weight:600;position:relative;z-index:1}
+.p-list{list-style:none;margin-top:20px;position:relative;z-index:1;display:grid;gap:11px}
+.p-list li{display:flex;gap:11px;align-items:flex-start;font-size:.86rem;color:var(--muted)}
+.p-list li b{color:#fff;font-weight:600}
+.p-list .ic{color:var(--cyan-soft);flex:0 0 auto;margin-top:2px}
+
+/* ---------- Metrics ---------- */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.metric{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px 22px;text-align:center;position:relative;overflow:hidden;transition:.3s}
+.metric:hover{transform:translateY(-5px);border-color:var(--cyan);background:var(--card-h)}
+.metric .num{font-family:'Sora';font-weight:800;font-size:clamp(2rem,4vw,2.9rem);color:var(--cyan-soft);line-height:1}
+.metric .lbl{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px}
+.metric::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;background:linear-gradient(90deg,var(--cyan),transparent);transform:scaleX(0);transform-origin:left;transition:.4s}
+.metric:hover::after{transform:scaleX(1)}
+
+/* ---------- Cards grid ---------- */
+.grid{display:grid;gap:18px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;transition:.3s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-4px);border-color:rgba(0,160,206,.5);background:var(--card-h);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.card h3{font-size:1.08rem;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.card .kicker{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan-soft);font-weight:600}
+.card p{color:var(--muted);font-size:.9rem;margin-top:8px}
+.chip{display:inline-block;font-size:.7rem;padding:4px 10px;border-radius:999px;background:rgba(0,160,206,.14);color:var(--cyan-soft);border:1px solid rgba(0,160,206,.25);margin:3px 3px 0 0;font-weight:500}
+.num-badge{width:34px;height:34px;flex:0 0 auto;border-radius:10px;display:grid;place-items:center;background:rgba(0,160,206,.15);color:var(--cyan-soft);font-family:'Sora';font-weight:700;font-size:.9rem;border:1px solid rgba(0,160,206,.3)}
+
+/* ---------- Featured (Diplomado) ---------- */
+.feature{background:linear-gradient(135deg,rgba(0,160,206,.16),rgba(23,48,73,.5));border:1px solid rgba(0,160,206,.35);border-radius:24px;padding:clamp(30px,5vw,52px);position:relative;overflow:hidden}
+.feature::before{content:"";position:absolute;right:-80px;top:-80px;width:340px;height:340px;border-radius:50%;border:1px solid rgba(0,160,206,.25)}
+.feature::after{content:"";position:absolute;right:-30px;top:-30px;width:230px;height:230px;border-radius:50%;border:1px solid rgba(0,160,206,.18)}
+.feature .badge-live{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:600;color:#7fe0ff;background:rgba(0,160,206,.2);padding:6px 14px;border-radius:999px;border:1px solid rgba(0,160,206,.4)}
+.feature .badge-live .pulse{width:8px;height:8px;border-radius:50%;background:#3ee68a;box-shadow:0 0 0 0 rgba(62,230,138,.7);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(62,230,138,.6)}70%{box-shadow:0 0 0 12px rgba(62,230,138,0)}100%{box-shadow:0 0 0 0 rgba(62,230,138,0)}}
+.feature h2{font-size:clamp(1.5rem,3.4vw,2.2rem);font-weight:800;margin:16px 0 10px;max-width:640px;position:relative;z-index:1}
+.feature p{color:var(--ink);opacity:.9;max-width:600px;position:relative;z-index:1}
+.feature-stats{display:flex;gap:34px;flex-wrap:wrap;margin-top:26px;position:relative;z-index:1}
+.feature-stats div .fn{font-family:'Sora';font-weight:800;font-size:1.7rem;color:var(--cyan-soft)}
+.feature-stats div .fl{font-size:.76rem;color:var(--muted)}
+
+/* ---------- Timeline ---------- */
+.tl{position:relative;padding-left:34px}
+.tl::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--cyan),transparent)}
+.tl-item{position:relative;padding:0 0 26px 0}
+.tl-item::before{content:"";position:absolute;left:-31px;top:5px;width:14px;height:14px;border-radius:50%;background:var(--navy-3);border:2px solid var(--cyan);box-shadow:0 0 0 4px rgba(0,160,206,.12)}
+.tl-item .yr{font-size:.74rem;font-weight:600;color:var(--cyan-soft);letter-spacing:.05em}
+.tl-item h4{font-size:1.02rem;margin:3px 0 2px}
+.tl-item .org{font-size:.82rem;color:var(--muted)}
+.tl-item .desc{font-size:.85rem;color:var(--muted);margin-top:5px}
+
+/* ---------- Method (ICONE) ---------- */
+.method{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.m-step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 20px;transition:.3s;cursor:default}
+.m-step:hover{transform:translateY(-5px);border-color:var(--cyan);background:var(--card-h)}
+.m-step .let{font-family:'Sora';font-weight:800;font-size:2rem;color:var(--cyan-soft);line-height:1}
+.m-step h4{font-size:.98rem;margin:12px 0 6px}
+.m-step p{font-size:.82rem;color:var(--muted)}
+
+/* ---------- Stack ---------- */
+.stack-wrap{display:flex;flex-wrap:wrap;gap:12px}
+.stack-item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 18px;font-size:.86rem;font-weight:500;color:var(--ink);transition:.25s;display:flex;align-items:center;gap:8px}
+.stack-item:hover{border-color:var(--cyan);color:var(--cyan-soft);transform:translateY(-3px);background:var(--card-h)}
+.stack-item .d{width:7px;height:7px;border-radius:50%;background:var(--cyan)}
+
+/* ---------- Testimonial ---------- */
+.quote{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:16px;padding:clamp(28px,4vw,44px);position:relative}
+.quote .mark{font-family:'Sora';font-size:4rem;color:rgba(0,160,206,.25);line-height:.6;position:absolute;top:22px;left:24px}
+.quote blockquote{font-size:clamp(1.02rem,2vw,1.28rem);font-style:italic;color:var(--ink);position:relative;z-index:1;padding-left:20px}
+.quote .who{margin-top:22px;display:flex;align-items:center;gap:14px;padding-left:20px}
+.quote .who .av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),#005f83);display:grid;place-items:center;font-weight:700;color:#fff}
+.quote .who b{display:block;font-family:'Sora'}
+.quote .who span{font-size:.8rem;color:var(--muted)}
+
+/* ---------- Contact / footer ---------- */
+.contact{background:linear-gradient(135deg,rgba(0,160,206,.14),rgba(23,48,73,.4));border:1px solid rgba(0,160,206,.3);border-radius:24px;padding:clamp(34px,5vw,60px);text-align:center}
+.contact h2{font-size:clamp(1.6rem,3.6vw,2.4rem);font-weight:800;margin-bottom:12px}
+.contact p{color:var(--muted);max-width:520px;margin:0 auto 28px}
+.contact-links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:var(--muted);font-size:.8rem}
+footer .respaldo{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;margin-bottom:18px;opacity:.75;font-size:.76rem}
+
+@media(max-width:880px){
+  .hero-grid{grid-template-columns:1fr;gap:36px}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .g3,.g2{grid-template-columns:1fr}
+  .method{grid-template-columns:repeat(2,1fr)}
+}
+/* dots side-nav for presentation mode */
+.dots{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:80;display:flex;flex-direction:column;gap:12px}
+.dots a{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);transition:.25s;display:block}
+.dots a:hover,.dots a.active{background:var(--cyan);transform:scale(1.35);box-shadow:0 0 10px var(--cyan-glow)}
+@media(max-width:1024px){.dots{display:none}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<nav>
+  <div class="wrap nav-in">
+    <div class="brand">
+      <span class="dot">JP</span>
+      <span>Jorge Hugo Pérez<small>Diplomado CX · Poli × Plaza Imperial</small></span>
+    </div>
+    <div class="nav-links">
+      <a href="#perfil">Perfil</a>
+      <a href="#diplomado">Diplomado</a>
+      <a href="#trayectoria">Trayectoria</a>
+      <a href="#metodo">Método ICONE</a>
+      <a href="#casos">Casos</a>
+      <a href="#stack">Stack IA</a>
+    </div>
+    <a href="#contacto" class="nav-cta">Contacto →</a>
+    <button class="burger" aria-label="Menú">☰</button>
+  </div>
+</nav>
+
+<div class="dots" aria-hidden="true">
+  <a href="#hero" title="Inicio"></a>
+  <a href="#perfil" title="Perfil"></a>
+  <a href="#diplomado" title="Diplomado"></a>
+  <a href="#trayectoria" title="Trayectoria"></a>
+  <a href="#metodo" title="Método"></a>
+  <a href="#casos" title="Casos"></a>
+  <a href="#stack" title="Stack"></a>
+  <a href="#contacto" title="Contacto"></a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <span class="eyebrow">Docente · Diplomado en Experiencia del Consumidor</span>
+      <h1 class="hero-name">Jorge Hugo<br><span class="grad">Pérez Gaona</span></h1>
+      <p class="hero-role">Acompaño a líderes y empresas de LATAM a <b>entender, adoptar y monetizar la IA</b> — uniendo 25+ años comerciales en Nestlé y Nutresa con el <b>ICONE Method</b>.</p>
+      <div class="hero-tags">
+        <span class="tag">CEO ICONE ialabs</span>
+        <span class="tag">Mentor certificado · Poli</span>
+        <span class="tag">Speaker EXMA</span>
+        <span class="tag">Jurado MinCiT</span>
+        <span class="tag">Creador del ICONE Method</span>
+      </div>
+      <div class="hero-cta">
+        <a href="#diplomado" class="btn btn-p">Ver mi rol en el diplomado ↓</a>
+        <a href="#contacto" class="btn btn-g">Conectar</a>
+      </div>
+    </div>
+    <div class="reveal in">
+      <div class="portrait">
+        <div class="portrait-in">
+          <div class="avatar">JP</div>
+          <h3>Jorge Hugo Pérez</h3>
+          <div class="p-role">IA aplicada · Emprendimiento · CX</div>
+          <ul class="p-list">
+            <li><span class="ic">◆</span><span><b>MBA</b> — Universidad EAN + Máster en Liderazgo Estratégico (Navarra)</span></li>
+            <li><span class="ic">◆</span><span>Docente activo <b>EAN</b> y <b>Politécnico Grancolombiano</b></span></li>
+            <li><span class="ic">◆</span><span>Mentor de Emprendimiento <b>certificado por el Poli</b></span></li>
+            <li><span class="ic">◆</span><span>Diseñador del <b>Diplomado CX</b> (alianza Plaza Imperial)</span></li>
+            <li><span class="ic">◆</span><span>Bogotá D.C., Colombia · <b>LATAM</b></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERFIL + METRICS -->
+<section id="perfil">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Perfil profesional</span>
+      <h2 class="sec-title">De "queremos hacer algo con IA"<br>a "ya tenemos resultados medibles"</h2>
+      <p class="sec-sub">Desde finales de 2022 sistematicé cómo <b>orquestar múltiples IAs</b> —generativas, predictivas, de búsqueda, visuales y de productividad— trabajando juntas dentro de un mismo flujo de negocio. Lo que enseño en aulas es lo que aplico con empresas, y viceversa.</p>
+    </div>
+    <div class="metrics reveal" style="margin-top:40px">
+      <div class="metric"><div class="num" data-to="25" data-suf="+">0</div><div class="lbl">Años de carrera</div></div>
+      <div class="metric"><div class="num" data-to="500" data-suf="+">0</div><div class="lbl">Empresas acompañadas</div></div>
+      <div class="metric"><div class="num" data-to="3000" data-suf="+">0</div><div class="lbl">Estudiantes impactados</div></div>
+      <div class="metric"><div class="num" data-to="15" data-suf="+">0</div><div class="lbl">Sectores aplicados</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DIPLOMADO (featured) -->
+<section id="diplomado">
+  <div class="wrap">
+    <div class="feature reveal">
+      <span class="badge-live"><span class="pulse"></span>Cohorte activa 2026</span>
+      <h2>Diplomado en Experiencia del Consumidor</h2>
+      <p><b>Politécnico Grancolombiano · alianza Plaza Imperial.</b> Diseño y dicto el programa completo, con un módulo de <span class="cyan">IA aplicada al retail</span>. Neuromarketing, servicio y experiencia del consumidor llevados a la operación real del centro comercial.</p>
+      <div class="feature-stats">
+        <div><div class="fn">8</div><div class="fl">Módulos</div></div>
+        <div><div class="fn">CX</div><div class="fl">+ IA aplicada al retail</div></div>
+        <div><div class="fn">100%</div><div class="fl">Diseñado y dictado por mí</div></div>
+        <div><div class="fn">Poli</div><div class="fl">× Plaza Imperial</div></div>
+      </div>
+    </div>
+
+    <div class="grid g3 reveal" style="margin-top:22px">
+      <div class="card">
+        <span class="kicker">Enfoque UX</span>
+        <h3>Experiencia del usuario</h3>
+        <p>Diseño de recorridos, fricción cero y usabilidad aplicada al punto de venta y a los canales digitales del retail.</p>
+      </div>
+      <div class="card">
+        <span class="kicker">Enfoque CX</span>
+        <h3>Experiencia del consumidor</h3>
+        <p>Neuromarketing, servicio y journey del cliente: convertir cada interacción en valor percibido y fidelización.</p>
+      </div>
+      <div class="card">
+        <span class="kicker">Enfoque IX</span>
+        <h3>Experiencia de interacción</h3>
+        <p>IA orquestada + datos para personalizar, anticipar y automatizar la conversación con el cliente en tiempo real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAYECTORIA -->
+<section id="trayectoria">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Trayectoria</span>
+      <h2 class="sec-title">25+ años uniendo negocio, aula y tecnología</h2>
+      <p class="sec-sub">Del gran consumo a la formación en IA: una carrera comercial de alto nivel que hoy alimenta lo que enseño.</p>
+    </div>
+    <div class="grid g2" style="margin-top:40px">
+      <div class="reveal">
+        <div class="tl">
+          <div class="tl-item"><div class="yr">JUL 2022 – ACTUALIDAD</div><h4>Founder &amp; CEO</h4><div class="org">ICONE ialabs · LATAM</div><div class="desc">Creador del ICONE Method. 3.000+ estudiantes en IA, ventas y liderazgo; 50+ empresas en transformación digital.</div></div>
+          <div class="tl-item"><div class="yr">2013 – 2022 · 9 años</div><h4>Roles comerciales senior</h4><div class="org">Nestlé de Colombia</div><div class="desc">Commercial Planning Lead, Brand Activation Manager (Maggi), Trade Nacional y Key Account — Canal Tradicional.</div></div>
+          <div class="tl-item"><div class="yr">2004 – 2012</div><h4>Jefaturas de ventas</h4><div class="org">Nutresa (Noel), Kellogg's, Casaluker</div><div class="desc">Liderazgo comercial de canales, trade regional y cuentas clave en gran consumo.</div></div>
+          <div class="tl-item"><div class="yr">1997 – 2004</div><h4>Ejecutivo de cuenta · Cadenas</h4><div class="org">Schering-Plough</div><div class="desc">Coordinación de mercadeo Región Centro y supervisión de mercaderistas Bogotá.</div></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="grid" style="gap:16px">
+          <div class="card">
+            <span class="kicker">Docencia activa</span>
+            <h3>Universidad EAN · Poli</h3>
+            <p>4 cursos en el primer semestre de 2026 (pregrado, postgrado y educación continua), incluida extensión EAN Rural.</p>
+          </div>
+          <div class="card">
+            <span class="kicker">Formación IA</span>
+            <h3>IA para BPO · SENA + Poli</h3>
+            <p>Reskilling presencial en IA real para trabajadores del sector BPO en Montería.</p>
+          </div>
+          <div class="card">
+            <span class="kicker">Reconocimientos</span>
+            <h3>Distinciones</h3>
+            <p>Finalista "Mentor del Año" EANISTA 2024 · Jurado Premio Nestlé 2025 · Speaker internacional (Impulsa Acapulco, Propósito 360).</p>
+            <div style="margin-top:12px">
+              <span class="chip">Speaker EXMA</span><span class="chip">Jurado MinCiT</span><span class="chip">GoFest</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METODO ICONE -->
+<section id="metodo">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Marco propio</span>
+      <h2 class="sec-title">El ICONE Method</h2>
+      <p class="sec-sub">Una hoja de ruta para pasar de la intención a la ejecución con IA — sin presupuestos millonarios. Estos son los pilares del pensamiento propio que aplico en el diplomado.</p>
+    </div>
+    <div class="method reveal" style="margin-top:40px">
+      <div class="m-step"><div class="let">I</div><h4>Orquestación de IAs</h4><p>Varias IAs trabajando juntas en un mismo flujo: donde aparecen las ventajas competitivas reales.</p></div>
+      <div class="m-step"><div class="let">C</div><h4>Estrategia con datos</h4><p>Estrategia comercial inteligente y diagnóstico empresarial: cuellos de botella y prioridades en horas.</p></div>
+      <div class="m-step"><div class="let">O</div><h4>Promptotipado</h4><p>Prototipar con prompts antes que con código; validar hipótesis de IA en horas, no en meses.</p></div>
+      <div class="m-step"><div class="let">N·E</div><h4>Impacto sostenible</h4><p>Emprendimiento sostenible con IA: propósito y resultados medibles para escalar con sentido.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASOS -->
+<section id="casos">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Casos de impacto</span>
+      <h2 class="sec-title">Resultados reales, no teoría</h2>
+    </div>
+    <div class="grid g3 reveal" style="margin-top:40px">
+      <div class="card"><h3><span class="num-badge">01</span>Plaza Imperial</h3><p>Diplomado en Experiencia del Consumidor (alianza Poli) con módulo de IA aplicada al retail. Cohorte activa 2026.</p></div>
+      <div class="card"><h3><span class="num-badge">02</span>Nestlé</h3><p>Desafío Creadores: programa corporativo de innovación comercial con método propio.</p></div>
+      <div class="card"><h3><span class="num-badge">03</span>Venta Efectiva 2025</h3><p>Conferencia con 3.500+ asistentes sobre automatización de la creatividad y contenido con propósito.</p></div>
+      <div class="card"><h3><span class="num-badge">04</span>Mompreneurs</h3><p>Acompañamiento a emprendedoras: estrategia comercial, marca personal y herramientas digitales.</p></div>
+      <div class="card"><h3><span class="num-badge">05</span>IA para BPO</h3><p>SENA + Poli: formación presencial en IA a trabajadores del sector en Montería.</p></div>
+      <div class="card"><h3><span class="num-badge">06</span>ECOS 2.0</h3><p>Módulos de transformación comercial para empresas en escalamiento, con respaldo gubernamental.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Stack tecnológico que orquesta</span>
+      <h2 class="sec-title">Las herramientas que hago trabajar juntas</h2>
+    </div>
+    <div class="stack-wrap reveal" style="margin-top:36px">
+      <span class="stack-item"><span class="d"></span>ChatGPT</span>
+      <span class="stack-item"><span class="d"></span>Claude</span>
+      <span class="stack-item"><span class="d"></span>Google AI</span>
+      <span class="stack-item"><span class="d"></span>Perplexity</span>
+      <span class="stack-item"><span class="d"></span>Midjourney</span>
+      <span class="stack-item"><span class="d"></span>Gamma AI</span>
+      <span class="stack-item"><span class="d"></span>Prompt Engineering</span>
+      <span class="stack-item"><span class="d"></span>HubSpot</span>
+      <span class="stack-item"><span class="d"></span>Zoho CRM</span>
+      <span class="stack-item"><span class="d"></span>Canvas LMS</span>
+      <span class="stack-item"><span class="d"></span>Moodle</span>
+      <span class="stack-item"><span class="d"></span>Genially</span>
+      <span class="stack-item"><span class="d"></span>Kahoot</span>
+    </div>
+
+    <div class="quote reveal" style="margin-top:50px">
+      <span class="mark">"</span>
+      <blockquote>La experiencia y conocimientos de Jorge son invaluables. No solo aporta una vasta experiencia, sino que demuestra una increíble empatía y capacidad de escucha activa que realmente marcan la diferencia.</blockquote>
+      <div class="who">
+        <div class="av">AS</div>
+        <div><b>Alexandra Salvador Sanabria</b><span>Estratega en Ads + Ecosistema Digital · LinkedIn, may. 2024</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="wrap">
+    <div class="contact reveal">
+      <span class="eyebrow" style="justify-content:center">Hablemos</span>
+      <h2>¿Construimos experiencias que el cliente recuerde?</h2>
+      <p>Docencia, consultoría en IA aplicada y experiencia del consumidor para empresas y aulas en LATAM.</p>
+      <div class="contact-links">
+        <a href="https://wa.me/573158940980" target="_blank" rel="noopener" class="btn btn-p">WhatsApp +57 315 894 0980</a>
+        <a href="mailto:contacto@iconeialabs.com" class="btn btn-g">contacto@iconeialabs.com</a>
+        <a href="https://www.linkedin.com/in/jorgehugoperezgaona" target="_blank" rel="noopener" class="btn btn-g">LinkedIn</a>
+        <a href="https://iconeialabs.com" target="_blank" rel="noopener" class="btn btn-g">iconeialabs.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="respaldo">
+      <span>EAN</span><span>Politécnico Grancolombiano</span><span>Javeriana</span><span>SENA</span><span>MinCiT</span><span>INNpulsa</span><span>Foro Europeo (Navarra)</span><span>EXMA</span><span>Plaza Imperial</span><span>Nestlé</span><span>Nutresa</span>
+    </div>
+    © 2026 Jorge Hugo Pérez Gaona · ICONE ialabs · Diplomado en Experiencia del Consumidor · Poli × Plaza Imperial
+  </div>
+</footer>
+
+<script>
+// progress bar
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.documentElement;const s=h.scrollTop/(h.scrollHeight-h.clientHeight);prog.style.width=(s*100)+'%'});
+
+// reveal on scroll
+const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// count-up
+function count(el){const to=+el.dataset.to,suf=el.dataset.suf||'';let s=null;const d=1400;
+  function step(t){if(!s)s=t;const p=Math.min((t-s)/d,1);const e=1-Math.pow(1-p,3);
+    let v=Math.floor(e*to);el.textContent=(v>=1000?(v/1000).toFixed(v>=1000&&to>=3000?0:1).replace('.0','')+'K':v)+suf;
+    if(to>=3000){el.textContent=(Math.floor(e*to)).toLocaleString('es')+suf}
+    else{el.textContent=Math.floor(e*to)+suf}
+    if(p<1)requestAnimationFrame(step)}
+  requestAnimationFrame(step)}
+const cio=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){count(e.target);cio.unobserve(e.target)}}),{threshold:.5});
+document.querySelectorAll('.metric .num').forEach(el=>cio.observe(el));
+
+// active section (nav + dots)
+const secs=[...document.querySelectorAll('section')];
+const navA=[...document.querySelectorAll('.nav-links a')];
+const dotA=[...document.querySelectorAll('.dots a')];
+const sio=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){
+  const id=e.target.id;
+  navA.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+id));
+  dotA.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+id));
+}}),{threshold:.4,rootMargin:'-20% 0px -40% 0px'});
+secs.forEach(s=>sio.observe(s));
+
+// keyboard nav (presentation mode)
+const ids=secs.map(s=>s.id);
+addEventListener('keydown',e=>{
+  const cur=ids.findIndex(id=>{const r=document.getElementById(id).getBoundingClientRect();return r.top>=-100&&r.top<window.innerHeight*.5});
+  let i=cur<0?0:cur;
+  if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();document.getElementById(ids[Math.min(i+1,ids.length-1)]).scrollIntoView()}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();document.getElementById(ids[Math.max(i-1,0)]).scrollIntoView()}
+});
+
+// burger (mobile)
+document.querySelector('.burger').addEventListener('click',()=>{
+  const l=document.querySelector('.nav-links');
+  const open=l.style.display==='flex';
+  l.style.display=open?'none':'flex';
+  if(!open){l.style.cssText='display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:rgba(10,24,38,.97);padding:16px;border-bottom:1px solid var(--line);gap:2px'}
+});
+document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>{if(innerWidth<=880)document.querySelector('.nav-links').style.display='none'}));
+</script>
+</body>
+</html>
